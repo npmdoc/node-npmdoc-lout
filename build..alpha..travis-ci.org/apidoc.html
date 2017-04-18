@@ -1,0 +1,185 @@
+<div class="apidocDiv">
+<style>
+/*csslint
+*/
+.apidocDiv {
+    background: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.apidocDiv a[href] {
+    color: #33f;
+    font-weight: bold;
+    text-decoration: none;
+}
+.apidocDiv a[href]:hover {
+    text-decoration: underline;
+}
+.apidocCodeCommentSpan {
+    background: #bbf;
+    color: #000;
+    display: block;
+}
+.apidocCodeKeywordSpan {
+    color: #d00;
+    font-weight: bold;
+}
+.apidocCodePre {
+    background: #eef;
+    border: 1px solid;
+    color: #777;
+    padding: 5px;
+    white-space: pre-wrap;
+}
+.apidocFooterDiv {
+    margin-top: 20px;
+    text-align: center;
+}
+.apidocModuleLi {
+    margin-top: 10px;
+}
+.apidocSectionDiv {
+    border-top: 1px solid;
+    margin-top: 20px;
+}
+.apidocSignatureSpan {
+    color: #777;
+    font-weight: bold;
+}
+</style>
+<h1>api documentation for
+    <a
+
+        href="https://github.com/hapijs/lout#readme"
+
+    >lout (v10.0.1)</a>
+</h1>
+<h4>API documentation generator plugin for hapi</h4>
+<div class="apidocSectionDiv"><a
+    href="#apidoc.tableOfContents"
+    id="apidoc.tableOfContents"
+><h1>table of contents</h1></a><ol>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.lout">module lout</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.lout.register">
+            function <span class="apidocSignatureSpan">lout.</span>register
+            <span class="apidocSignatureSpan">(plugin, options, pluginNext)</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+</ol></div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.lout" id="apidoc.module.lout">module lout</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.lout.register" id="apidoc.element.lout.register">
+        function <span class="apidocSignatureSpan">lout.</span>register
+        <span class="apidocSignatureSpan">(plugin, options, pluginNext)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">register = function (plugin, options, pluginNext) {
+
+    const validateOptions = internals.options.validate(options);
+    if (validateOptions.error) {
+        return pluginNext(validateOptions.error);
+    }
+
+    const settings = Hoek.clone(internals.defaults);
+    Hoek.merge(settings, options);
+
+    if (settings.endpoint[0] !== &#x27;/&#x27;) {
+        settings.endpoint = `/${settings.endpoint}`;
+    }
+
+    if (settings.endpoint.length &#x3e; 1 &#x26;&#x26; settings.endpoint[settings.endpoint.length - 1] === &#x27;/&#x27;) {
+        settings.endpoint = settings.endpoint.slice(0, -1);
+    }
+
+    const cssBaseUrl = `${settings.endpoint === &#x27;/&#x27; ? &#x27;&#x27; : settings.endpoint}/css`;
+
+    plugin.dependency([&#x27;inert&#x27;, &#x27;vision&#x27;], (server, serverNext) =&#x3e; {
+
+        server.views({
+            engines: settings.engines || {
+                html: {
+                    module: Handlebars.create()
+                }
+            },
+            path: settings.basePath,
+            partialsPath: settings.partialsPath,
+            helpersPath: settings.helpersPath,
+            runtimeOptions: {
+                data: {
+                    cssBaseUrl: cssBaseUrl.replace(/(.*?)((\/\w+)?\/css)/, &#x27;$2&#x27;),
+                    apiVersion: settings.apiVersion
+                }
+            }
+        });
+
+        server.route({
+            method: &#x27;GET&#x27;,
+            path: settings.endpoint,
+            config: internals.docs(settings, server)
+        });
+
+        if (settings.cssPath) {
+            server.route({
+                method: &#x27;GET&#x27;,
+                path: `${cssBaseUrl}/{path*}`,
+                config: {
+                    handler: {
+                        directory: {
+                            path: settings.cssPath,
+                            index: false,
+                            listing: false
+                        }
+                    },
+                    plugins: {
+                        lout: false
+                    },
+                    auth: settings.auth
+                }
+            });
+        }
+
+        serverNext();
+    });
+
+    pluginNext();
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+
+```javascript
+var Hapi = require(&#x27;hapi&#x27;);
+var server = new Hapi.Server();
+
+server.connection({ port: 80 });
+
+server.<span class="apidocCodeKeywordSpan">register</span>([require(&#x27;vision&#x27;), require(&#x27;inert&#x27;), { register:
+require(&#x27;lout&#x27;) }], function(err) {
+});
+
+server.start(function () {
+     console.log(&#x27;Server running at:&#x27;, server.info.uri);
+});
+```
+...</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocFooterDiv">
+    [ this document was created with
+    <a href="https://github.com/kaizhu256/node-utility2" target="_blank">utility2</a>
+    ]
+</div>
+</div>

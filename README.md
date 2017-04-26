@@ -1,6 +1,6 @@
 # npmdoc-lout
 
-#### api documentation for  [lout (v10.0.1)](https://github.com/hapijs/lout#readme)  [![npm package](https://img.shields.io/npm/v/npmdoc-lout.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-lout) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-lout.svg)](https://travis-ci.org/npmdoc/node-npmdoc-lout)
+#### basic api documentation for  [lout (v10.0.1)](https://github.com/hapijs/lout#readme)  [![npm package](https://img.shields.io/npm/v/npmdoc-lout.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-lout) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-lout.svg)](https://travis-ci.org/npmdoc/node-npmdoc-lout)
 
 #### API documentation generator plugin for hapi
 
@@ -83,7 +83,8 @@
         "test": "lab -r console -t 100 -a code -L",
         "test-cov-html": "lab -r html -o coverage.html -a code -L"
     },
-    "version": "10.0.1"
+    "version": "10.0.1",
+    "bin": {}
 }
 ```
 
